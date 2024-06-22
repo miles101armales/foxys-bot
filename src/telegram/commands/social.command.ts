@@ -24,6 +24,12 @@ export class SocialCommand extends Command {
   }
 
   async handled(ctx: MyContext): Promise<void> {
-    ctx.reply('Ваши соцсети');
+    ctx.reply('Ваши соцсети', {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+        ],
+      },
+    });
   }
 }

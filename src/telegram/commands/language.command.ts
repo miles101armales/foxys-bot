@@ -24,6 +24,12 @@ export class LanguageCommand extends Command {
   }
 
   async handled(ctx: MyContext): Promise<void> {
-    ctx.reply('Поменять язык');
+    ctx.reply('Поменять язык', {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+        ],
+      },
+    });
   }
 }

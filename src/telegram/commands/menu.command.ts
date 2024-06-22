@@ -47,6 +47,10 @@ export class MenuCommand extends Command {
         },
       );
     });
+
+    this.client.action('menu', (ctx) => {
+      this.handled(ctx);
+    });
   }
 
   async handled(ctx) {

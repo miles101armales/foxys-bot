@@ -16,14 +16,35 @@ export class LeaderboardCommand extends Command {
 
   async handle(): Promise<void> {
     this.client.action('leaderboard', async (ctx: MyContext) => {
-      this.handled(ctx);
+      await this.handled(ctx);
     });
     this.client.command('leaderboard', async (ctx: MyContext) => {
-      this.handled(ctx);
+      await this.handled(ctx);
     });
   }
 
   async handled(ctx: MyContext): Promise<void> {
-    ctx.reply('Таблица лидеров');
+    // Извлекаем и сортируем пользователей по point_balance в порядке убывания
+    const users = await this.telegramRepository.find({
+      order: { point_balance: 'DESC' },
+    });
+
+    // Формируем текст таблицы лидеров
+    let leaderboardText = '🏆 Таблица лидеров 🏆\n\n';
+    leaderboardText += 'Место | Имя пользователя | Баллы\n';
+    leaderboardText += '------------------------------\n';
+
+    users.forEach((user, index) => {
+      leaderboardText += `${index + 1}. ${user.username || user.name} - ${user.point_balance} баллов\n`;
+    });
+
+    // Отправляем сообщение с таблицей лидеров
+    await ctx.reply(leaderboardText, {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+        ],
+      },
+    });
   }
 }

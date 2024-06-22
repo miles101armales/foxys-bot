@@ -32,6 +32,7 @@ export class TasksCommand extends Command {
       [{ text: 'Буст канала', callback_data: 'boost_channel' }],
       [{ text: 'Прочитай инструкцию', callback_data: 'read_instructions' }],
       [{ text: 'Добавить тикер в ник', callback_data: 'add_ticker_to_nick' }],
+      [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
     ];
     ctx.deleteMessage(ctx.msg.message_id);
     ctx.reply('Вам доступны следующие задания!', {
