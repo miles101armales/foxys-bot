@@ -33,12 +33,20 @@ export class ReferalsCommand extends Command {
 
   async handled(ctx: MyContext): Promise<void> {
     const ref_link = `https://t.me/test_foxy_190924_bot?start=${ctx.chat.id}`;
-    ctx.reply(`Поделись этой ссылкой с друзьями: ${ref_link}`, {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
-        ],
-      },
-    });
+    const clients = await this.telegramRepository.find();
+    for (const _client of clients) {
+      this.client.telegram.sendPhoto(
+        _client.chat_id,
+        { source: 'src/public/referrals.png' },
+        {
+          caption: `Поделись этой ссылкой с друзьями: ${ref_link}`,
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+            ],
+          },
+        },
+      );
+    }
   }
 }
