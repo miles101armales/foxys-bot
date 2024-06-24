@@ -7,8 +7,14 @@ export class Referral {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  chat_id: string;
+
   @ManyToOne(() => Telegram, (telegram) => telegram.referrals)
-  referredUser: User;
+  referredUser1: User;
+
+  @ManyToOne(() => Telegram, (telegram) => telegram.referrals)
+  referredUser2: User;
 
   @ManyToOne(() => Telegram)
   referringUser: User;

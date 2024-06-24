@@ -73,7 +73,11 @@ export class StartCommand extends Command {
           relations: ['referrals'],
         });
         if (referringUser) {
-          await this.referralService.createReferral(referringUser, user);
+          await this.referralService.createReferral(
+            ctx.chat.id.toString(),
+            referringUser,
+            user,
+          );
         }
       }
     });
