@@ -42,7 +42,7 @@ export class StartCommand extends Command {
       this.capcha(ctx);
       const userId = ctx.chat.id.toString();
       const username = ctx.from.username;
-      let referrer: number | null = null;
+      let referrer: string | null = null;
 
       if (ctx.msg.text.split(' ').length > 1) {
         const referrerCandidate = ctx.message.text.split(' ')[1];
@@ -53,10 +53,10 @@ export class StartCommand extends Command {
           if (
             userId !== referrerCandidate &&
             (await this.telegramRepository.exists({
-              where: { referrer: referrerCandidateInt },
+              where: { referrer: referrerCandidateInt.toString() },
             }))
           ) {
-            referrer = referrerCandidateInt;
+            referrer = referrerCandidateInt.toString();
           }
         } catch (error) {
           this.logger.error('Error parsing referrer candidate', error);
@@ -75,8 +75,8 @@ export class StartCommand extends Command {
         if (referringUser) {
           await this.referralService.createReferral(
             ctx.chat.id.toString(),
-            referringUser,
-            user,
+            referringUser.chat_id,
+            user.chat_id,
           );
         }
       }

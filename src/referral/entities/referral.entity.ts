@@ -5,20 +5,20 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Referral {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; //сгенерированный id реферальной операции
+
+  @Column({nullable: true})
+  chat_id: string; // id чата приглашенного пользователя
+
+  @ManyToOne(() => Telegram, (telegram) => telegram.referrals, {nullable:  true})
+  referredUser1: User; // приглашенный пользователь
+
+  @Column({default: ''})
+  ref_chat_id: string; // id чата корневого пользователя
+
+  @ManyToOne(() => Telegram, { nullable: true })
+  referringUser: User; // корневой пользователь
 
   @Column()
-  chat_id: string;
-
-  @ManyToOne(() => Telegram, (telegram) => telegram.referrals)
-  referredUser1: User;
-
-  @ManyToOne(() => Telegram, (telegram) => telegram.referrals)
-  referredUser2: User;
-
-  @ManyToOne(() => Telegram)
-  referringUser: User;
-
-  @Column()
-  createdAt: Date;
+  createdAt: Date; // дата создания операции
 }

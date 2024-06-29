@@ -16,28 +16,22 @@ export class ReferalsCommand extends Command {
 
   async handle(): Promise<void> {
     this.client.action('referals', async (ctx: MyContext) => {
-      await this.telegramRepository.update(
-        { chat_id: ctx.chat.id.toString() },
-        { referrer: ctx.chat.id },
-      );
       this.handled(ctx);
     });
     this.client.command('referals', async (ctx: MyContext) => {
-      await this.telegramRepository.update(
-        { chat_id: ctx.chat.id.toString() },
-        { referrer: ctx.chat.id },
-      );
       this.handled(ctx);
     });
   }
 
   async handled(ctx: MyContext): Promise<void> {
     const ref_link = `https://t.me/test_foxy_190924_bot?start=${ctx.chat.id}`;
-    const clients = await this.telegramRepository.find();
-    for (const _client of clients) {
+      await this.telegramRepository.update(
+        { chat_id: ctx.chat.id.toString() },
+        { referrer: ctx.chat.id.toString() },
+      );
       this.client.telegram.sendPhoto(
-        _client.chat_id,
-        { source: 'src/public/referrals.png' },
+        ctx.chat.id,
+        { source: 'src/telegram/public/referrals.png' },
         {
           caption: `Поделись этой ссылкой с друзьями: ${ref_link}`,
           reply_markup: {
@@ -47,6 +41,6 @@ export class ReferalsCommand extends Command {
           },
         },
       );
-    }
+    
   }
 }

@@ -28,7 +28,6 @@ export class MenuCommand extends Command {
           caption:
             `Ваш баланс: ${client.point_balance}\n` +
             `Ваши рефералы: ${client.referrals.length}\n` +
-            `Рефералы принесли: ${client.referrals_bonus}\n\n` +
             `Чем займемся сегодня, мой друг?`,
           reply_markup: {
             inline_keyboard: [
@@ -40,7 +39,6 @@ export class MenuCommand extends Command {
               ],
               [
                 { text: '⚡Соц. сети', callback_data: 'social' },
-                { text: '♨️Язык', callback_data: 'language' },
               ],
             ],
           },

@@ -46,7 +46,7 @@ export class TelegramService implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     try {
       this.pointSystemService = new PointSystemService(this.telegramRepository);
-      this.referralService = new ReferralService(this.referralRepository);
+      this.referralService = new ReferralService(this.referralRepository, this.telegramRepository);
       this.commands = [
         new StartCommand(
           this.client,
@@ -56,7 +56,8 @@ export class TelegramService implements OnApplicationBootstrap {
           new MenuCommand(this.client, this.telegramRepository),
         ),
         new MenuCommand(this.client, this.telegramRepository),
-        new TasksCommand(this.client, this.telegramRepository),
+        new TasksCommand(this.client, this.telegramRepository,
+          this.pointSystemService),
         new ReferalsCommand(this.client, this.telegramRepository),
         new BalanceCommand(this.client, this.telegramRepository),
         new LeaderboardCommand(this.client, this.telegramRepository),
@@ -77,6 +78,10 @@ export class TelegramService implements OnApplicationBootstrap {
 
       this.client.launch();
       this.logger.log('Telegram Bot initialized');
+      const clients = await this.telegramRepository.find();
+      // for (const _client of clients) {
+      //   this.client.telegram.sendMessage(_client.chat_id, 'Доступна таблица лидеров\n\nДоступно создание реферальной ссылки и реализована реферальная система(без начисления баллов)\n\n/start')
+      // }
     } catch (error) {
       return this.logger.log('Bot Token is required');
     }
