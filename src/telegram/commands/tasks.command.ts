@@ -41,51 +41,124 @@ export class TasksCommand extends Command {
       reply_markup: { inline_keyboard: buttons },
     });
 
-    this.client.action('invite_5_people', async ctx => {
+    this.client.action('invite_5_people', async (ctx) => {
       const client = await this.telegramRepository.findOne({
         where: { chat_id: ctx.chat.id.toString() },
         relations: ['referrals'],
       });
-      if(client.referrals.length == 5) {
-        ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-        return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
+      if (client.referrals.length == 5) {
+        ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+            ],
+          },
+        });
+        return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
       } else {
-        return ctx.reply('Задание не выполнено\n\nВозвращайся, когда выполнишь', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
+        return ctx.reply(
+          'Задание не выполнено\n\nВозвращайся, когда выполнишь',
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+              ],
+            },
+          },
+        );
       }
-    })
+    });
 
-    this.client.action('subscribe_twitter', async ctx => {
-      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
-    })
+    this.client.action('subscribe_twitter', async (ctx) => {
+      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
+        },
+      });
+      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+    });
 
-    this.client.action('subscribe_channel', async ctx => {
-      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
-    })
+    this.client.action('subscribe_channel', async (ctx) => {
+      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
+        },
+      });
+      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+    });
 
-    this.client.action('subscribe_chat', async ctx => {
-      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
-    })
+    this.client.action('subscribe_chat', async (ctx) => {
+      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
+        },
+      });
+      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+    });
 
-    this.client.action('boost_channel', async ctx => {
-      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
-    })
+    this.client.action('boost_channel', async (ctx) => {
+      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
+        },
+      });
+      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+    });
 
-    this.client.action('read_instructions', async ctx => {
-      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
-    })
+    this.client.action('read_instructions', async (ctx) => {
+      ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
+        },
+      });
+      return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+    });
 
-    this.client.action('add_ticker_to_nick', async ctx => {
-      if(ctx.from.username.includes('foxy')) {
-        ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
-        return this.pointSystemService.pointAdd(500, ctx.chat.id.toString())
+    this.client.action('add_ticker_to_nick', async (ctx) => {
+      if (ctx.from.username) {
+        if (ctx.from.username.includes('foxy')) {
+          ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+              ],
+            },
+          });
+          return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+        } else {
+          return ctx.reply(
+            'Задание не выполнено\n\nВозвращайся, когда выполнишь',
+            {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+                ],
+              },
+            },
+          );
+        }
       } else {
-        return ctx.reply('Задание не выполнено\n\nВозвращайся, когда выполнишь', {reply_markup: {inline_keyboard: [[{ text: 'Вернуться в главное меню', callback_data: 'menu' }]]}});
+        return ctx.reply(
+          'Задание не выполнено\n\nВозвращайся, когда ник будет доступен',
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+              ],
+            },
+          },
+        );
       }
-    })
+    });
   }
 }
