@@ -37,9 +37,7 @@ export class MenuCommand extends Command {
                 { text: '💰Баланс', callback_data: 'balance' },
                 { text: '🏆Лидеры', callback_data: 'leaderboard' },
               ],
-              [
-                { text: '⚡Соц. сети', callback_data: 'social' },
-              ],
+              [{ text: '⚡Соц. сети', callback_data: 'social' }],
             ],
           },
         },

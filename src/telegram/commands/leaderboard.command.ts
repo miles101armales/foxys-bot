@@ -34,12 +34,24 @@ export class LeaderboardCommand extends Command {
     let leaderboardText = '🏆 Таблица лидеров 🏆\n\n';
 
     users.forEach((user, index) => {
-      leaderboardText += `<b>${index + 1}. ${user.username || user.name}</b> - <u>${user.point_balance} баллов</u>\n`;
+      // Формируем строку для каждого пользователя
+      let userLine = `<b>${index + 1}. `;
+
+      // Если есть username или name, добавляем его в строку
+      if (user.username || user.name) {
+        userLine += `${user.username || user.name}`;
+      }
+
+      // Добавляем разделитель и баллы пользователя
+      userLine += `</b> - <u>${user.point_balance} баллов</u>\n`;
+
+      // Добавляем сформированную строку в текст таблицы лидеров
+      leaderboardText += userLine;
     });
 
     leaderboardText += '------------------------------\n';
 
-    const currentUserId = ctx.message.chat.id; // Получаем chat_id текущего пользователя
+    const currentUserId = ctx.chat.id; // Получаем chat_id текущего пользователя
     const currentUser = await this.telegramRepository.findOne({
       where: { chat_id: currentUserId.toString() },
     });
@@ -48,17 +60,18 @@ export class LeaderboardCommand extends Command {
         (user) => user.chat_id === currentUserId.toString(),
       );
       if (position !== -1) {
-        leaderboardText += `Ваше место: ${position + 1}\n`;
+        leaderboardText += `Ваше место: <b>${position + 1}\n</b>`;
       }
     }
 
-    // Отправляем сообщение с таблицей лидеров
+    // Отправляем сообщение с таблицей лидеров, используя HTML-форматирование
     await ctx.replyWithHTML(leaderboardText, {
       reply_markup: {
         inline_keyboard: [
           [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
         ],
       },
+      parse_mode: 'HTML', // Указываем, что используем HTML для форматирования текста
     });
   }
 }

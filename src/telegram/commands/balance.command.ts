@@ -24,7 +24,12 @@ export class BalanceCommand extends Command {
   }
 
   async handled(ctx: MyContext): Promise<void> {
-    ctx.reply('Ваш баланс', {
+    ctx.deleteMessages([ctx.msg.message_id, ctx.msg.message_id - 1]);
+    const client = await this.telegramRepository.findOne({
+      where: { chat_id: ctx.chat.id.toString() },
+      relations: ['referrals'],
+    });
+    ctx.reply(`Ваш баланс: ${client.point_balance}`, {
       reply_markup: {
         inline_keyboard: [
           [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
