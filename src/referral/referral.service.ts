@@ -24,7 +24,7 @@ export class ReferralService {
   //   referredUser1: Telegram, // приглашенный пользователь
   // ) {
   //   // поиск операций от корневого пользователя
-  //   const existReferringOperations = await this.referralRepository.findBy({ref_chat_id: referringUser.chat_id}) 
+  //   const existReferringOperations = await this.referralRepository.findBy({ref_chat_id: referringUser.chat_id})
 
   //   // в случае если они есть
   //   for(const operation of existReferringOperations){
@@ -45,18 +45,22 @@ export class ReferralService {
   // }
 
   async createReferral(
-    chat_id: string, 
-    referringUserChatId: string, 
-    referredUser1ChatId: string
+    chat_id: string,
+    referringUserChatId: string,
+    referredUser1ChatId: string,
   ) {
     // Ищем пользователя, который пригласил (реферера)
-    const referringUser = await this.telegramRepository.findOne({ where: { chat_id: referringUserChatId } });
+    const referringUser = await this.telegramRepository.findOne({
+      where: { chat_id: referringUserChatId },
+    });
     if (!referringUser) {
       throw new Error('Referring user not found');
     }
 
     // Ищем пользователя, который был приглашен (реферал)
-    const referredUser1 = await this.telegramRepository.findOne({ where: { chat_id: referredUser1ChatId } });
+    const referredUser1 = await this.telegramRepository.findOne({
+      where: { chat_id: referredUser1ChatId },
+    });
     if (!referredUser1) {
       throw new Error('Referred user not found');
     }
@@ -64,11 +68,12 @@ export class ReferralService {
     // Начисляем баллы за первого уровня рефералов
     this.pointSystemService.pointAdd(100, referringUser.chat_id);
 
-    const referalFather = await this.referralRepository.findOne({where: {chat_id: referringUser.chat_id}})
-    if(referalFather) {
-      await this.pointSystemService.pointAdd(50, referalFather.ref_chat_id)
+    const referalFather = await this.referralRepository.findOne({
+      where: { chat_id: referringUser.chat_id },
+    });
+    if (referalFather) {
+      await this.pointSystemService.pointAdd(50, referalFather.ref_chat_id);
     }
-
 
     // Сохраняем реферальную операцию
     const referral = this.referralRepository.create({

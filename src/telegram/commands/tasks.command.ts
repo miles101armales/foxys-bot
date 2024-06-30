@@ -130,9 +130,16 @@ export class TasksCommand extends Command {
     }
 
     await ctx.deleteMessage(ctx.msg.message_id);
-    await ctx.reply('Вам доступны следующие задания!', {
-      reply_markup: { inline_keyboard: buttons },
-    });
+    await ctx.reply(
+      `Защитники, настало время для новых подвигов! 
+
+Мы предлагаем охотникам принять участие в важных миссиях, чтобы защитить наш виртуальный лес от хитрых хомяков и других угроз. 
+
+Вот список актуальных заданий:`,
+      {
+        reply_markup: { inline_keyboard: buttons },
+      },
+    );
 
     this.client.action('invite_5_people', async (ctx) => {
       if (client.referrals.length == 5) {

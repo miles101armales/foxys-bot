@@ -34,12 +34,15 @@ export class BalanceCommand extends Command {
       where: { chat_id: ctx.chat.id.toString() },
       relations: ['referrals'],
     });
-    ctx.reply(`Ваш баланс: ${client.point_balance}`, {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
-        ],
+    ctx.replyWithHTML(
+      `Каждый вклад в защиту леса и активное участие будут вознаграждены!\n\nПроверь свой баланс: <b><u>${client.point_balance}</u></b>`,
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
+        },
       },
-    });
+    );
   }
 }

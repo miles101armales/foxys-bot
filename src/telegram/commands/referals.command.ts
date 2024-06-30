@@ -38,7 +38,12 @@ export class ReferalsCommand extends Command {
       ctx.chat.id,
       { source: 'src/telegram/public/referrals.png' },
       {
-        caption: `Поделись этой ссылкой с друзьями: ${ref_link}`,
+        caption:
+          `Чем больше нас будет, тем сильнее мы станем. 
+
+Пригласи своих друзей присоединиться по твоей уникальной реферальной ссылке, получай 100 поинтов за каждого, а также 50 очков за их рефералов. 
+
+Награда будет по истине легендарной!\n\n` + `${ref_link}`,
         reply_markup: {
           inline_keyboard: [
             [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
