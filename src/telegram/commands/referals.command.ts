@@ -51,5 +51,6 @@ export class ReferalsCommand extends Command {
         },
       },
     );
+    await ctx.deleteMessage(ctx.msg.message_id);
   }
 }

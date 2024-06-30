@@ -43,5 +43,6 @@ export class SocialCommand extends Command {
         parse_mode: 'Markdown',
       },
     );
+    await ctx.deleteMessage(ctx.msg.message_id);
   }
 }

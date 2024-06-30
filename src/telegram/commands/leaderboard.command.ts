@@ -78,5 +78,6 @@ export class LeaderboardCommand extends Command {
       },
       parse_mode: 'HTML', // Указываем, что используем HTML для форматирования текста
     });
+    await ctx.deleteMessage(ctx.msg.message_id);
   }
 }

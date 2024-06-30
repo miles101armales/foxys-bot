@@ -21,7 +21,6 @@ export class MenuCommand extends Command {
       this.logger.log(
         `${ctx.from.username ? ctx.from.username : ctx.from.id} запросил меню`,
       );
-      ctx.deleteMessages([ctx.msg.message_id, ctx.msg.message_id - 1]);
       const client = await this.telegramRepository.findOne({
         where: { chat_id: ctx.chat.id.toString() },
         relations: ['referrals'],
@@ -47,6 +46,7 @@ export class MenuCommand extends Command {
           },
         },
       );
+      await ctx.deleteMessage(ctx.msg.message_id);
     });
 
     this.client.action('menu', (ctx) => {
@@ -55,7 +55,6 @@ export class MenuCommand extends Command {
   }
 
   async handled(ctx) {
-    ctx.deleteMessages([ctx.msg.message_id, ctx.msg.message_id - 1]);
     const client = await this.telegramRepository.findOne({
       where: { chat_id: ctx.chat.id.toString() },
       relations: ['referrals'],
@@ -67,7 +66,6 @@ export class MenuCommand extends Command {
         caption:
           `Ваш баланс: ${client.point_balance}\n` +
           `Ваши рефералы: ${client.referrals.length}\n` +
-          `Рефералы принесли: ${client.referrals_bonus}\n\n` +
           `Чем займемся сегодня, мой друг?`,
         reply_markup: {
           inline_keyboard: [
@@ -85,5 +83,6 @@ export class MenuCommand extends Command {
         },
       },
     );
+    await ctx.deleteMessage(ctx.msg.message_id);
   }
 }

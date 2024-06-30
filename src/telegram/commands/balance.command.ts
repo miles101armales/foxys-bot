@@ -44,5 +44,6 @@ export class BalanceCommand extends Command {
         },
       },
     );
+    await ctx.deleteMessage(ctx.msg.message_id);
   }
 }

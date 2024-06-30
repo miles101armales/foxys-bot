@@ -31,5 +31,6 @@ export class LanguageCommand extends Command {
         ],
       },
     });
+    await ctx.deleteMessage(ctx.msg.message_id);
   }
 }

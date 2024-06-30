@@ -142,7 +142,8 @@ export class TasksCommand extends Command {
     );
 
     this.client.action('invite_5_people', async (ctx) => {
-      if (client.referrals.length == 5) {
+      if (client.referrals.length == people) {
+        await ctx.deleteMessage(ctx.msg.message_id);
         ctx.reply(
           `Задание успешно выполнено\n\nВам начислено ${prize} баллов`,
           {
@@ -158,6 +159,7 @@ export class TasksCommand extends Command {
         );
         return this.pointSystemService.pointAdd(prize, ctx.chat.id.toString());
       } else {
+        await ctx.deleteMessage(ctx.msg.message_id);
         return ctx.reply(
           'Задание не выполнено\n\nВозвращайся, когда выполнишь',
           {
@@ -172,15 +174,16 @@ export class TasksCommand extends Command {
     });
 
     this.client.action('subscribe_twitter', async (ctx) => {
+      await ctx.deleteMessage(ctx.msg.message_id);
       ctx.sendMessage(
         `Подпишись, по кнопке ниже`,
         Markup.inlineKeyboard([
           Markup.button.url(`Подписаться`, `https://x.com/foxiesonton?s=21`),
-          Markup.button.callback(`Проверить`, `check`),
+          Markup.button.callback(`Проверить`, `check_twitter`),
         ]),
       );
 
-      this.client.action('check', async (ctx) => {
+      this.client.action('check_twitter', async (ctx) => {
         ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
           reply_markup: {
             inline_keyboard: [
@@ -195,20 +198,22 @@ export class TasksCommand extends Command {
         this.logger.log(
           `${ctx.from.username ? ctx.from.username : ctx.from.id} выполнен задание по подписке на твиттер`,
         );
+        await ctx.deleteMessage(ctx.msg.message_id);
         return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
       });
     });
 
     this.client.action('subscribe_channel', async (ctx) => {
+      await ctx.deleteMessage(ctx.msg.message_id);
       ctx.sendMessage(
         `Подпишись, по кнопке ниже`,
         Markup.inlineKeyboard([
           Markup.button.url(`Подписаться`, `https://t.me/+uMs3twWyNpo2NDEy`),
-          Markup.button.callback(`Проверить`, `check`),
+          Markup.button.callback(`Проверить`, `check_channel`),
         ]),
       );
 
-      this.client.action('check', async (ctx) => {
+      this.client.action('check_channel', async (ctx) => {
         ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
           reply_markup: {
             inline_keyboard: [
@@ -223,11 +228,13 @@ export class TasksCommand extends Command {
         this.logger.log(
           `${ctx.from.username ? ctx.from.username : ctx.from.id} выполнен задание по подписке на канал`,
         );
+        await ctx.deleteMessage(ctx.msg.message_id);
         return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
       });
     });
 
     this.client.action('subscribe_chat', async (ctx) => {
+      await ctx.deleteMessage(ctx.msg.message_id);
       ctx.reply('Чат еще не создан. Ожидайте', {
         reply_markup: {
           inline_keyboard: [
@@ -246,14 +253,15 @@ export class TasksCommand extends Command {
     });
 
     this.client.action('boost_channel', async (ctx) => {
+      await ctx.deleteMessage(ctx.msg.message_id);
       ctx.sendMessage(
         `Подпишись, по кнопке ниже`,
         Markup.inlineKeyboard([
           Markup.button.url(`Забустить`, `https://t.me/+uMs3twWyNpo2NDEy`),
-          Markup.button.callback(`Проверить`, `check`),
+          Markup.button.callback(`Проверить`, `checkboost`),
         ]),
       );
-      this.client.action('check', async (ctx) => {
+      this.client.action('checkboost', async (ctx) => {
         ctx.reply('Задание успешно выполнено\n\nВам начислено 500 баллов', {
           reply_markup: {
             inline_keyboard: [
@@ -268,11 +276,13 @@ export class TasksCommand extends Command {
         this.logger.log(
           `${ctx.from.username ? ctx.from.username : ctx.from.id} выполнен задание по бусту канала`,
         );
-        return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
+        await ctx.deleteMessage(ctx.msg.message_id);
+        return await this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
       });
     });
 
     this.client.action('read_instructions', async (ctx) => {
+      await ctx.deleteMessage(ctx.msg.message_id);
       ctx.reply('Инструкции в разработке', {
         reply_markup: {
           inline_keyboard: [
@@ -307,8 +317,10 @@ export class TasksCommand extends Command {
           this.logger.log(
             `${ctx.from.username ? ctx.from.username : ctx.from.id} выполнен задание по добавлению тикера в ник инструкции`,
           );
+          await ctx.deleteMessage(ctx.msg.message_id);
           return this.pointSystemService.pointAdd(500, ctx.chat.id.toString());
         } else {
+          await ctx.deleteMessage(ctx.msg.message_id);
           return ctx.reply(
             'Задание не выполнено\n\nВозвращайся, когда выполнишь',
             {
@@ -321,6 +333,7 @@ export class TasksCommand extends Command {
           );
         }
       } else {
+        await ctx.deleteMessage(ctx.msg.message_id);
         return ctx.reply(
           'Задание не выполнено\n\nВозвращайся, когда ник будет доступен',
           {
@@ -333,5 +346,7 @@ export class TasksCommand extends Command {
         );
       }
     });
+    ctx.deleteMessage(ctx.msg.message_id);
   }
+  
 }
