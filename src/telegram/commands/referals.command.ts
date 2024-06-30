@@ -4,8 +4,10 @@ import { MyContext } from '../interfaces/context.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Telegram } from '../entities/telegram.entity';
+import { Logger } from '@nestjs/common';
 
 export class ReferalsCommand extends Command {
+  private logger = new Logger(ReferalsCommand.name);
   constructor(
     client: Telegraf<MyContext>,
     @InjectRepository(Telegram)
@@ -24,23 +26,25 @@ export class ReferalsCommand extends Command {
   }
 
   async handled(ctx: MyContext): Promise<void> {
+    this.logger.log(
+      `${ctx.from.username ? ctx.from.username : ctx.from.id} запросил реферальную ссылку`,
+    );
     const ref_link = `https://t.me/test_foxy_190924_bot?start=${ctx.chat.id}`;
-      await this.telegramRepository.update(
-        { chat_id: ctx.chat.id.toString() },
-        { referrer: ctx.chat.id.toString() },
-      );
-      this.client.telegram.sendPhoto(
-        ctx.chat.id,
-        { source: 'src/telegram/public/referrals.png' },
-        {
-          caption: `Поделись этой ссылкой с друзьями: ${ref_link}`,
-          reply_markup: {
-            inline_keyboard: [
-              [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
-            ],
-          },
+    await this.telegramRepository.update(
+      { chat_id: ctx.chat.id.toString() },
+      { referrer: ctx.chat.id.toString() },
+    );
+    this.client.telegram.sendPhoto(
+      ctx.chat.id,
+      { source: 'src/telegram/public/referrals.png' },
+      {
+        caption: `Поделись этой ссылкой с друзьями: ${ref_link}`,
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Вернуться в главное меню', callback_data: 'menu' }],
+          ],
         },
-      );
-    
+      },
+    );
   }
 }

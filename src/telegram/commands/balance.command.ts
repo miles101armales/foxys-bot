@@ -4,8 +4,10 @@ import { MyContext } from '../interfaces/context.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Telegram } from '../entities/telegram.entity';
+import { Logger } from '@nestjs/common';
 
 export class BalanceCommand extends Command {
+  private logger = new Logger(BalanceCommand.name);
   constructor(
     client: Telegraf<MyContext>,
     @InjectRepository(Telegram)
@@ -24,6 +26,9 @@ export class BalanceCommand extends Command {
   }
 
   async handled(ctx: MyContext): Promise<void> {
+    this.logger.log(
+      `${ctx.from.username ? ctx.from.username : ctx.from.id} запросил баланс`,
+    );
     ctx.deleteMessages([ctx.msg.message_id, ctx.msg.message_id - 1]);
     const client = await this.telegramRepository.findOne({
       where: { chat_id: ctx.chat.id.toString() },

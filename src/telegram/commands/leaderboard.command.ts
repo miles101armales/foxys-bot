@@ -4,8 +4,10 @@ import { MyContext } from '../interfaces/context.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Telegram } from '../entities/telegram.entity';
+import { Logger } from '@nestjs/common';
 
 export class LeaderboardCommand extends Command {
+  private logger = new Logger(LeaderboardCommand.name);
   constructor(
     client: Telegraf<MyContext>,
     @InjectRepository(Telegram)
@@ -24,6 +26,9 @@ export class LeaderboardCommand extends Command {
   }
 
   async handled(ctx: MyContext): Promise<void> {
+    this.logger.log(
+      `${ctx.from.username ? ctx.from.username : ctx.from.id} запросил список лидеров`,
+    );
     // Извлекаем и сортируем пользователей по point_balance в порядке убывания
     const users = await this.telegramRepository.find({
       order: { point_balance: 'DESC' },
